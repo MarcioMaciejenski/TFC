@@ -6,7 +6,7 @@ EXPOSE 3001
 
 COPY . .
 
-COPY package.json .
+COPY package* .
 
 RUN npm install && npm run build
 
