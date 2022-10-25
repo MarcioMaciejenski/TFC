@@ -9,9 +9,13 @@ export default class User {
     this.login = this.login.bind(this);
   }
 
-  public login = async (req: Request, res: Response, _next: NextFunction) => {
-    const { email, password } = req.body;
-    const token = await this._service.login({ email, password });
-    return res.status(200).json({ token });
+  public login = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+      const token = await this._service.login({ email, password });
+      return res.status(200).json({ token });
+    } catch (error) {
+      next(error);
+    }
   };
 }

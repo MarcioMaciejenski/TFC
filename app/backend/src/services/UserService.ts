@@ -2,6 +2,7 @@ import bcrypt = require('bcryptjs');
 import UserModel from '../database/models/UserModel';
 import { IUser } from '../interfaces/IUser.interface';
 import Token from '../utils/Token';
+import ErroGenerate from '../utils/ErrorGenerate';
 
 export default class User {
   constructor(private model = UserModel) { }
@@ -19,13 +20,13 @@ export default class User {
   public async login(user: IUser): Promise<string> {
     const isUser = await this.model.findOne({ where: { email: user.email } });
     if (!isUser) {
-      throw new Error('user nao encontrado');
+      throw (new ErroGenerate('Incorrect email or password', 401));
     }
     const passwordDB = isUser?.getDataValue('password');
     const verifyPassword = await bcrypt.compare(user.password, passwordDB);
     if (verifyPassword) {
       return User.generateToken(isUser);
     }
-    throw new Error('password nao encontrado');
+    throw new ErroGenerate('Incorrect email or password', 401);
   }
 }
