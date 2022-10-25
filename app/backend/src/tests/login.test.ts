@@ -28,7 +28,7 @@ describe('Teste da rota /login', () => {
   });
 
   describe('Quando o campo "email" está incorreto', () => {
-    before(() => {
+    before(async () => {
       sinon.stub(UserModel, 'findOne').resolves(null);
     });
     after(() => sinon.restore());
@@ -41,7 +41,7 @@ describe('Teste da rota /login', () => {
   });
 
   describe('Quando o campo "password" está incorreto', () => {
-    before(() => {
+    before(async () => {
       sinon.stub(UserModel, 'findOne').resolves(null);
     });
     after(() => sinon.restore());
