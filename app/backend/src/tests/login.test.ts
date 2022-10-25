@@ -3,7 +3,7 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import { Model } from 'sequelize';
+import UserModel from '../database/models/UserModel';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -29,7 +29,7 @@ describe('Teste da rota /login', () => {
 
   describe('Quando o campo "email" está incorreto', () => {
     before(() => {
-      sinon.stub(Model, 'findOne').resolves(null);
+      sinon.stub(UserModel, 'findOne').resolves(null);
     });
     after(() => sinon.restore());
     it('deve retornar um status 401', async () => {
@@ -42,7 +42,7 @@ describe('Teste da rota /login', () => {
 
   describe('Quando o campo "password" está incorreto', () => {
     before(() => {
-      sinon.stub(Model, 'findOne').resolves(null);
+      sinon.stub(UserModel, 'findOne').resolves(null);
     });
     after(() => sinon.restore());
     it('deve retornar um status 401', async () => {

@@ -1,4 +1,5 @@
 import bcrypt = require('bcryptjs');
+import * as jwt from 'jsonwebtoken';
 import UserModel from '../database/models/UserModel';
 import { IUser } from '../interfaces/IUser.interface';
 import Token from '../utils/Token';
@@ -28,5 +29,12 @@ export default class User {
       return User.generateToken(isUser);
     }
     throw new ErroGenerate('Incorrect email or password', 401);
+  }
+
+  public async verifyToken(token: string | undefined): Promise<string | jwt.JwtPayload | null> {
+    if (!token) throw (new ErroGenerate('Incorrect token', 401));
+    const data = Token.decode(token);
+    console.log(this);
+    return data;
   }
 }

@@ -7,6 +7,7 @@ export default class User {
   constructor(service: UserService) {
     this._service = service;
     this.login = this.login.bind(this);
+    this.verifyLogin = this.verifyLogin.bind(this);
   }
 
   public login = async (req: Request, res: Response, next: NextFunction) => {
@@ -14,6 +15,16 @@ export default class User {
       const { email, password } = req.body;
       const token = await this._service.login({ email, password });
       return res.status(200).json({ token });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public verifyLogin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const token = req.headers.authorization;
+      const getRole = await this._service.verifyToken(token);
+      return res.status(200).json(getRole);
     } catch (error) {
       next(error);
     }

@@ -13,6 +13,10 @@ class Token {
   public static encode(data: IUserToken) {
     return jwt.sign({ data }, secret, Token.options);
   }
+
+  public static decode(token: string) {
+    return jwt.verify(token, secret);
+  }
 }
 
 export default Token;
