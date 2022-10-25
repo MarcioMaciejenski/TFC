@@ -6,7 +6,7 @@ EXPOSE 3001
 
 COPY . .
 
-COPY package* .
+COPY package* /app-backend/
 
 RUN npm install && npm run build
 
