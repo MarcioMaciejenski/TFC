@@ -17,4 +17,14 @@ export default class Team {
       next(error);
     }
   };
+
+  public getById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const team = await this._service.getById(Number(id));
+      return res.status(200).json(team);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
