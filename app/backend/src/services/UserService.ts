@@ -5,6 +5,15 @@ import { IUser } from '../interfaces/IUser.interface';
 import Token from '../utils/Token';
 import ErroGenerate from '../utils/ErrorGenerate';
 
+interface role {
+  data:{
+    id: number,
+    username: string,
+    role: string,
+    email: string,
+  }
+}
+
 export default class User {
   constructor(private model = UserModel) { }
 
@@ -31,10 +40,9 @@ export default class User {
     throw new ErroGenerate('Incorrect email or password', 401);
   }
 
-  public async verifyToken(token: string | undefined): Promise<string | jwt.JwtPayload | null> {
+  static async verifyToken(token: string | undefined): Promise<string | jwt.JwtPayload | null> {
     if (!token) throw (new ErroGenerate('Incorrect token', 401));
-    const data = Token.decode(token);
-    console.log(this);
-    return data;
+    const data = Token.decode(token) as role;
+    return data.data.role;
   }
 }

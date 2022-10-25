@@ -23,8 +23,8 @@ export default class User {
   public verifyLogin = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.headers.authorization;
-      const getRole = await this._service.verifyToken(token);
-      return res.status(200).json(getRole);
+      const getRole = await UserService.verifyToken(token);
+      return res.status(200).json({ role: getRole });
     } catch (error) {
       next(error);
     }
