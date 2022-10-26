@@ -48,15 +48,13 @@ Matche.init(
   },
 );
 
-Matche.hasMany(TeamModel, {
-  sourceKey: 'homeTeam',
-  foreignKey: 'id',
+Matche.belongsTo(TeamModel, {
+  foreignKey: 'homeTeam',
   as: 'teamHome',
 });
 
-Matche.hasMany(TeamModel, {
-  sourceKey: 'awayTeam',
-  foreignKey: 'id',
+Matche.belongsTo(TeamModel, {
+  foreignKey: 'awayTeam',
   as: 'teamAway',
 });
 
