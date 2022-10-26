@@ -1,4 +1,4 @@
-import { INTEGER, Model, TINYINT } from 'sequelize';
+import { INTEGER, Model, BOOLEAN } from 'sequelize';
 import db from '.';
 import TeamModel from './TeamModel';
 
@@ -36,7 +36,7 @@ Matche.init(
       allowNull: false,
     },
     inProgress: {
-      type: TINYINT,
+      type: BOOLEAN,
       allowNull: false,
     },
   },

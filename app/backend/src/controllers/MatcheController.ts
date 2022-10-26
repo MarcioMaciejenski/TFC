@@ -7,14 +7,31 @@ export default class Matche {
   constructor(service: MatcheService) {
     this._service = service;
     this.getAll = this.getAll.bind(this);
+    this.getInProgress = this.getInProgress.bind(this);
   }
 
-  public getAll = async (req: Request, res: Response, next: NextFunction) => {
+  private getInProgress = async (inProgress: string | any
+  | string[] | any[] | undefined) => {
+    // console.log('controller', inProgress);
     try {
-      const allMatches = await this._service.getAll();
-      return res.status(200).json(allMatches);
+      const getMatchesInProgress = await this._service.getInProgress(inProgress);
+      return getMatchesInProgress;
     } catch (error) {
-      next(error);
+      throw new Error('error');
     }
+  };
+
+  public getAll = async (req: Request, res: Response, next: NextFunction) => {
+    const { inProgress } = req.query;
+    if (!inProgress) {
+      try {
+        const allMatches = await this._service.getAll();
+        return res.status(200).json(allMatches);
+      } catch (error) {
+        next(error);
+      }
+    }
+    const findInProgress = await this.getInProgress(inProgress);
+    return res.status(200).json(findInProgress);
   };
 }

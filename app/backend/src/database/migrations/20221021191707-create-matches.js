@@ -42,7 +42,7 @@ module.exports = {
         allowNull: false,
       },
       in_progress: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       }
     },

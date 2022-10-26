@@ -22,4 +22,21 @@ export default class Matche {
     });
     return allMatches;
   }
+
+  public async getInProgress(queryValue: string): Promise<MatcheModel[] | IMatche[]> {
+    let value = 0;
+    if (queryValue === 'true') {
+      value = 1;
+    }
+    const matchesInProgress = await this.model.findAll({
+      where: { inProgress: value },
+      include: [{ model: TeamModel, as: 'teamHome', attributes: { exclude: ['id'] },
+      },
+      {
+        model: TeamModel, as: 'teamAway', attributes: { exclude: ['id'] },
+      },
+      ],
+    });
+    return matchesInProgress;
+  }
 }
