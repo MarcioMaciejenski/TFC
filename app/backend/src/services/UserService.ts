@@ -4,15 +4,7 @@ import UserModel from '../database/models/UserModel';
 import { IUser } from '../interfaces/IUser.interface';
 import Token from '../utils/Token';
 import ErroGenerate from '../utils/ErrorGenerate';
-
-interface role {
-  data:{
-    id: number,
-    username: string,
-    role: string,
-    email: string,
-  }
-}
+import IRole from '../interfaces/IRole.interface';
 
 export default class User {
   constructor(private model = UserModel) { }
@@ -42,7 +34,7 @@ export default class User {
 
   static async verifyToken(token: string | undefined): Promise<string | jwt.JwtPayload | null> {
     if (!token) throw (new ErroGenerate('Incorrect token', 401));
-    const data = Token.decode(token) as role;
+    const data = Token.decode(token) as IRole;
     return data.data.role;
   }
 }

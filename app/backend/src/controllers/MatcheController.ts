@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { ICreateMatche } from '../interfaces/IMatche.interface';
 import MatcheService from '../services/MatcheService';
 
 export default class Matche {
@@ -33,5 +34,15 @@ export default class Matche {
     }
     const findInProgress = await this.getInProgress(inProgress);
     return res.status(200).json(findInProgress);
+  };
+
+  public create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const matche = req.body as ICreateMatche;
+      const newMatche = await this._service.create(matche);
+      return res.status(201).json(newMatche);
+    } catch (error) {
+      next(error);
+    }
   };
 }

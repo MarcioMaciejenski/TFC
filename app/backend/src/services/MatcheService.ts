@@ -1,6 +1,6 @@
 import TeamModel from '../database/models/TeamModel';
 import MatcheModel from '../database/models/MatcheModel';
-import IMatche from '../interfaces/IMatche.interface';
+import IMatche, { ICreateMatche } from '../interfaces/IMatche.interface';
 
 export default class Matche {
   private model = MatcheModel;
@@ -38,5 +38,10 @@ export default class Matche {
       ],
     });
     return matchesInProgress;
+  }
+
+  public async create(matche: ICreateMatche): Promise<ICreateMatche> {
+    const newMatche = await this.model.create({ ...matche });
+    return newMatche;
   }
 }
