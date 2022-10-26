@@ -44,4 +44,18 @@ export default class Matche {
     const newMatche = await this.model.create({ ...matche });
     return newMatche;
   }
+
+  private async getById(id: string): Promise<MatcheModel | null> {
+    const verifyId = await this.model.findByPk(id);
+    return verifyId;
+  }
+
+  public async update(id: string): Promise<number | null> {
+    const existId = await this.getById(id);
+    if (existId === null) {
+      return existId;
+    }
+    const [endMatch] = await this.model.update({ inProgress: false }, { where: { id } });
+    return endMatch;
+  }
 }

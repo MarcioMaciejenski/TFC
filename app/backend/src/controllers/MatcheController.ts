@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import ErroGenerate from '../utils/ErrorGenerate';
 import { ICreateMatche } from '../interfaces/IMatche.interface';
 import MatcheService from '../services/MatcheService';
 
@@ -13,7 +14,6 @@ export default class Matche {
 
   private getInProgress = async (inProgress: string | any
   | string[] | any[] | undefined) => {
-    // console.log('controller', inProgress);
     try {
       const getMatchesInProgress = await this._service.getInProgress(inProgress);
       return getMatchesInProgress;
@@ -41,6 +41,19 @@ export default class Matche {
       const matche = req.body as ICreateMatche;
       const newMatche = await this._service.create(matche);
       return res.status(201).json(newMatche);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const endMatch = await this._service.update(id);
+      if (endMatch === null) {
+        throw new ErroGenerate('Id matche not exists', 404);
+      }
+      return res.status(200).json({ message: 'Finished' });
     } catch (error) {
       next(error);
     }

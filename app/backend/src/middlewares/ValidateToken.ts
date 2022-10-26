@@ -11,7 +11,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   try {
     Token.decode(token);
   } catch (error) {
-    return next(new ErroGenerate('Expired or invalid token', 401));
+    return next(new ErroGenerate('Token must be a valid token', 401));
   }
   return next();
 };
