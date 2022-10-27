@@ -6,4 +6,5 @@ export default (req: Request, res: Response, next: NextFunction) => {
   if (homeTeam === awayTeam) {
     return next(new ErroGenerate('It is not possible to create a match with two equal teams', 422));
   }
+  return next();
 };
