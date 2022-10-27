@@ -59,17 +59,27 @@ export default class Matche {
     return verifyExists;
   }
 
-  private async getById(id: string): Promise<MatcheModel | null> {
+  private async existsIdMatche(id: string): Promise<MatcheModel | null> {
     const verifyId = await this.model.findByPk(id);
     return verifyId;
   }
 
-  public async update(id: string): Promise<number | null> {
-    const existId = await this.getById(id);
+  public async finishMatche(id: string): Promise<number | null> {
+    const existId = await this.existsIdMatche(id);
     if (existId === null) {
       return existId;
     }
     const [endMatch] = await this.model.update({ inProgress: false }, { where: { id } });
     return endMatch;
+  }
+
+  public async updateMatcheScore(
+    id: string,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<number> {
+    const [updateScore] = await this.model
+      .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    return updateScore;
   }
 }

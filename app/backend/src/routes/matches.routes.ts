@@ -10,6 +10,7 @@ const matcheController = new MatcheController(matcheService);
 
 router.get('/matches', matcheController.getAll);
 router.post('/matches', validateToken, validateTeams, matcheController.create);
-router.patch('/matches/:id/finish', matcheController.update);
+router.patch('/matches/:id/finish', matcheController.finishMatche);
+router.patch('/matches/:id', matcheController.updateMatcheScore);
 
 export default router;

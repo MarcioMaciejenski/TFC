@@ -47,14 +47,25 @@ export default class Matche {
     }
   };
 
-  public update = async (req: Request, res: Response, next: NextFunction) => {
+  public finishMatche = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const endMatch = await this._service.update(id);
+      const endMatch = await this._service.finishMatche(id);
       if (endMatch === null) {
         throw new ErroGenerate('Id matche not exists', 404);
       }
       return res.status(200).json({ message: 'Finished' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public updateMatcheScore = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+      await this._service.updateMatcheScore(id, homeTeamGoals, awayTeamGoals);
+      return res.status(200).json({ message: 'Updated score' });
     } catch (error) {
       next(error);
     }
