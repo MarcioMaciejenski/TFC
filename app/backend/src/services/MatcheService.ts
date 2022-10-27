@@ -41,7 +41,7 @@ export default class Matche {
     return matchesInProgress;
   }
 
-  private async verifyTeams(teams: number[]): Promise<TeamModel | null> {
+  public async verifyTeams(teams: number[]): Promise<TeamModel | null> {
     const existsHomeTeam = await this._model.findByPk(teams[0]);
     if (existsHomeTeam === null) return existsHomeTeam;
     const existsAwaitTeam = await this._model.findByPk(teams[1]);
@@ -59,7 +59,7 @@ export default class Matche {
     return verifyExists;
   }
 
-  private async existsIdMatche(id: string): Promise<MatcheModel | null> {
+  public async existsIdMatche(id: string): Promise<MatcheModel | null> {
     const verifyId = await this.model.findByPk(id);
     return verifyId;
   }

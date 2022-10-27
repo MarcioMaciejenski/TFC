@@ -55,20 +55,6 @@ const matchesInProgressFalse = [
       "teamName": "Bahia"
     }
   },
-  {
-    "id": 5,
-    "homeTeam": 7,
-    "homeTeamGoals": 1,
-    "awayTeam": 10,
-    "awayTeamGoals": 1,
-    "inProgress": false,
-    "teamHome": {
-      "teamName": "Flamengo"
-    },
-    "teamAway": {
-      "teamName": "Minas Brasília"
-    }
-  },
 ]
 
 const matchesInProgressTrue = [
@@ -114,46 +100,21 @@ const matchesInProgressTrue = [
       "teamName": "Minas Brasília"
     }
   },
+]
+
+const matche = [
   {
-    "id": 44,
-    "homeTeam": 7,
-    "homeTeamGoals": 2,
-    "awayTeam": 15,
-    "awayTeamGoals": 2,
-    "inProgress": true,
-    "teamHome": {
-      "teamName": "Flamengo"
-    },
-    "teamAway": {
-      "teamName": "São José-SP"
-    }
-  },
-  {
-    "id": 45,
-    "homeTeam": 5,
+    "id": 1,
+    "homeTeam": 16,
     "homeTeamGoals": 1,
-    "awayTeam": 3,
+    "awayTeam": 8,
     "awayTeamGoals": 1,
-    "inProgress": true,
+    "inProgress": false,
     "teamHome": {
-      "teamName": "Cruzeiro"
+      "teamName": "São Paulo"
     },
     "teamAway": {
-      "teamName": "Botafogo"
-    }
-  },
-  {
-    "id": 46,
-    "homeTeam": 4,
-    "homeTeamGoals": 1,
-    "awayTeam": 12,
-    "awayTeamGoals": 1,
-    "inProgress": true,
-    "teamHome": {
-      "teamName": "Corinthians"
-    },
-    "teamAway": {
-      "teamName": "Palmeiras"
+      "teamName": "Grêmio"
     }
   },
 ]
@@ -161,4 +122,5 @@ const matchesInProgressTrue = [
 export {
   matchesInProgressFalse,
   matchesInProgressTrue,
+  matche,
 }

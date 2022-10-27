@@ -11,10 +11,10 @@ export default class User {
 
   private static generateToken(user: UserModel) {
     const userToken = {
-      id: user.getDataValue('id'),
-      username: user.getDataValue('username'),
-      role: user.getDataValue('role'),
-      email: user.getDataValue('email'),
+      id: user.id,
+      username: user.username,
+      role: user.role,
+      email: user.email,
     };
     return Token.encode(userToken);
   }
@@ -24,7 +24,8 @@ export default class User {
     if (!isUser) {
       throw (new ErroGenerate('Incorrect email or password', 401));
     }
-    const passwordDB = isUser?.getDataValue('password');
+    // const passwordDB = isUser?.getDataValue('password');
+    const passwordDB = isUser.password;
     const verifyPassword = await bcrypt.compare(user.password, passwordDB);
     if (verifyPassword) {
       return User.generateToken(isUser);

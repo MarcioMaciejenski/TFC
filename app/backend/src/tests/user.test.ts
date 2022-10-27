@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import { app } from '../app';
 import UserModel from '../database/models/UserModel';
+import { IUser } from '../interfaces/IUser.interface';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -41,6 +42,7 @@ describe('Teste da rota /login', () => {
   });
 
   describe('Quando o campo "password" está incorreto', () => {
+    const passwordValid = 
     before(async () => {
       sinon.stub(UserModel, 'findOne').resolves(null);
     });
@@ -52,4 +54,17 @@ describe('Teste da rota /login', () => {
       expect(httpResponse.body).to.deep.equal({ message: 'Incorrect email or password'});
     });
   });
+  describe('quando o login é feito com sucesso', () => {
+    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'};
+    before(() => {
+      sinon.stub(UserModel, "findOne").resolves(user as IUser | any)
+    });
+    after(() => sinon.restore());
+    it('deve retorna um status 200', async () => {
+      const httpResponse = await chai.request(app).post('/login')
+      .send({email: 'admin@admin.com', password: 'secret_admin'});
+      expect(httpResponse.status).to.equal(200);
+      expect(httpResponse.body).to.have.property('token');
+    });
+  })
 });
