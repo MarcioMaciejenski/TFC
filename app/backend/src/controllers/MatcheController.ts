@@ -40,6 +40,7 @@ export default class Matche {
     try {
       const matche = req.body as ICreateMatche;
       const newMatche = await this._service.create(matche);
+      if (newMatche === null) throw new ErroGenerate('There is no team with such id!', 404);
       return res.status(201).json(newMatche);
     } catch (error) {
       next(error);

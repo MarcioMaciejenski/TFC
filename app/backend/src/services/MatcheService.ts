@@ -4,6 +4,7 @@ import IMatche, { ICreateMatche } from '../interfaces/IMatche.interface';
 
 export default class Matche {
   private model = MatcheModel;
+  private _model = TeamModel;
 
   public async getAll(): Promise<MatcheModel[] | IMatche[]> {
     const allMatches = await this.model.findAll({
@@ -40,9 +41,22 @@ export default class Matche {
     return matchesInProgress;
   }
 
-  public async create(matche: ICreateMatche): Promise<ICreateMatche> {
-    const newMatche = await this.model.create({ ...matche });
-    return newMatche;
+  private async verifyTeams(teams: number[]): Promise<TeamModel | null> {
+    const existsHomeTeam = await this._model.findByPk(teams[0]);
+    if (existsHomeTeam === null) return existsHomeTeam;
+    const existsAwaitTeam = await this._model.findByPk(teams[1]);
+    if (existsAwaitTeam === null) return existsAwaitTeam;
+    return existsAwaitTeam;
+  }
+
+  public async create(matche: ICreateMatche): Promise<ICreateMatche | null> {
+    const { homeTeam, awayTeam } = matche;
+    const verifyExists = await this.verifyTeams([homeTeam, awayTeam]);
+    if (verifyExists) {
+      const newMatche = await this.model.create({ ...matche });
+      return newMatche;
+    }
+    return verifyExists;
   }
 
   private async getById(id: string): Promise<MatcheModel | null> {
