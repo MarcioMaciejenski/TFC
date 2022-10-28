@@ -2,6 +2,7 @@ import * as express from 'express';
 import UserRouter from './routes/users.routes';
 import TeamRouter from './routes/teams.routes';
 import MatcheRouter from './routes/matches.routes';
+import LeaderBoardRouter from './routes/leaderBoard.routes';
 import ErrorHandlerMiddleware from './middlewares/ErrorHandler.middleware';
 
 class App {
@@ -15,6 +16,7 @@ class App {
     this.app.use(UserRouter);
     this.app.use(TeamRouter);
     this.app.use(MatcheRouter);
+    this.app.use(LeaderBoardRouter);
     this.app.get('/', (req, res) => res.json({ ok: true }));
     this.app.use(ErrorHandlerMiddleware);
   }
