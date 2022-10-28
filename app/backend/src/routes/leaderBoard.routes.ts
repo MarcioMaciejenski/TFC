@@ -7,5 +7,6 @@ const leaderBoardService = new LeaderBoardService();
 const leaderBoardController = new LeaderBoardController(leaderBoardService);
 
 router.get('/leaderboard/home', leaderBoardController.getAllHomeTeams);
+router.get('/leaderboard/away', leaderBoardController.getAllAwayTeams);
 
 export default router;

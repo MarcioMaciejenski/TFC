@@ -29,6 +29,4 @@ WHERE m.in_progress = 0
 GROUP BY m.home_team
 ORDER BY totalPoints DESC, totalVictories DESC, goalsBalance DESC, goalsFavor DESC, goalsOwn DESC;`;
 
-export default {
-  leaderBoardHome,
-};
+export default leaderBoardHome;

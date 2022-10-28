@@ -17,4 +17,13 @@ export default class LeaderBoard {
       next(error);
     }
   };
+
+  public getAllAwayTeams = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const awayTeamsRanking = await this._service.getAllAwayTeams();
+      return res.status(200).json(awayTeamsRanking);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
