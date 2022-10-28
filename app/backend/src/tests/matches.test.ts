@@ -33,25 +33,23 @@ describe('Testes da rota /matches', () => {
       sinon.stub(MatcheService.prototype, 'getInProgress').resolves(matchesInProgressFalse as any[]);
     });
     after(() => sinon.restore());
-  });
     it('quando a query string é "/matches?inProgress=false"', async () => {
-    const httpResponse = await chai.request(app).get('/matches?inProgress=false');
-    expect(httpResponse.status).to.equal(200);
-    // expect(httpResponse.body).to.deep.equal(matchesInProgressFalse);
-
+      const httpResponse = await chai.request(app).get('/matches?inProgress=false');
+      expect(httpResponse.status).to.equal(200);
+      expect(httpResponse.body).to.deep.equal(matchesInProgressFalse);  
+    });
   });
-
-
+  
   describe('Rota GET /matches usando query string', () => {
     before(async() => { 
       sinon.stub(MatcheService.prototype, 'getInProgress').resolves(matchesInProgressTrue as any[]);
     });
     after(() => sinon.restore());
-  });
     it('quando a query string é "/matches?inProgress=true"', async () => {
-    const httpResponse = await chai.request(app).get('/matches?inProgress=true');
-    expect(httpResponse.status).to.equal(200);
-    // expect(httpResponse.body).to.deep.equal(matchesInProgressTrue);
+      const httpResponse = await chai.request(app).get('/matches?inProgress=true');
+      expect(httpResponse.status).to.equal(200);
+      expect(httpResponse.body).to.deep.equal(matchesInProgressTrue);
+    });
   });
 
   describe('Rota POST /matches', () => { 
@@ -131,7 +129,6 @@ describe('Testes da rota /matches', () => {
     after(() => sinon.restore());
     it('é possível atualizar o status "inProgress" para false', async () => {
       const httpResponse = await chai.request(app).patch('/matches/25/finish');
-      console.log('httpResponse', httpResponse.body);
       expect(httpResponse.status).to.equal(200);
       expect(httpResponse.body).to.deep.equal({ message: "Finished"});
     })
@@ -146,7 +143,6 @@ describe('Testes da rota /matches', () => {
     after(() => sinon.restore());
     it('não é possível atualizar o status "inProgress" para false de partida que não existe', async () => {
       const httpResponse = await chai.request(app).patch('/matches/652/finish');
-      console.log('httpResponse', httpResponse.body);
       expect(httpResponse.status).to.equal(404);
       expect(httpResponse.body).to.deep.equal({ message: "Id matche not exists"});
     })
