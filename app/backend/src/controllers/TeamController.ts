@@ -9,7 +9,8 @@ export default class Team {
     this.getAll = this.getAll.bind(this);
   }
 
-  public getAll = async (req: Request, res: Response, next: NextFunction) => {
+  public getAll = async (req: Request, res: Response, next: NextFunction):
+  Promise<Response | undefined> => {
     try {
       const allTeams = await this._service.getAll();
       return res.status(200).json(allTeams);
@@ -18,7 +19,8 @@ export default class Team {
     }
   };
 
-  public getById = async (req: Request, res: Response, next: NextFunction) => {
+  public getById = async (req: Request, res: Response, next: NextFunction):
+  Promise<Response | undefined> => {
     try {
       const { id } = req.params;
       const team = await this._service.getById(Number(id));

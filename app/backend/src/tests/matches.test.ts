@@ -8,7 +8,7 @@ import UserModel from '../database/models/UserModel';
 import MatcheService from '../services/MatcheService';
 
 import IMatche from '../interfaces/IMatche.interface';
-import IUser from '../interfaces/IUser.interface';
+import { IUser } from '../interfaces/IUser.interface';
 import { IGetAllMatches } from '../interfaces/IMatche.interface';
 
 import allMatches from './mocks/allMatches';
@@ -18,7 +18,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe('Testes da rota /matches', () => {
-  before(async() => {
+  before(async () => {
     sinon.stub(MatcheModel, 'findAll').resolves(allMatches as any[]);
   });
   after(() => sinon.restore());
@@ -26,22 +26,34 @@ describe('Testes da rota /matches', () => {
     const httpResponse = await chai.request(app).get('/matches');
     expect(httpResponse.status).to.equal(200);
     expect(httpResponse.body).to.deep.equal(allMatches);
+
+    describe('quando der erro na requisição', () => {
+      before(async () => {
+        sinon.stub(MatcheModel, 'findAll').rejects();
+      });
+      after(() => sinon.restore());
+      it('deve retorna status 500', async () => {
+        const httpResponse = await chai.request(app).get('/matches');
+        expect(httpResponse.status).to.equal(500);
+        expect(httpResponse.body).to.equal('Error');
+      })
+    })
   });
 
   describe('Rota GET /matches usando query string', () => {
-    before(async() => { 
+    before(async () => {
       sinon.stub(MatcheService.prototype, 'getInProgress').resolves(matchesInProgressFalse as any[]);
     });
     after(() => sinon.restore());
     it('quando a query string é "/matches?inProgress=false"', async () => {
       const httpResponse = await chai.request(app).get('/matches?inProgress=false');
       expect(httpResponse.status).to.equal(200);
-      expect(httpResponse.body).to.deep.equal(matchesInProgressFalse);  
+      expect(httpResponse.body).to.deep.equal(matchesInProgressFalse);
     });
   });
-  
+
   describe('Rota GET /matches usando query string', () => {
-    before(async() => { 
+    before(async () => {
       sinon.stub(MatcheService.prototype, 'getInProgress').resolves(matchesInProgressTrue as any[]);
     });
     after(() => sinon.restore());
@@ -52,8 +64,8 @@ describe('Testes da rota /matches', () => {
     });
   });
 
-  describe('Rota POST /matches', () => { 
-    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'};
+  describe('Rota POST /matches', () => {
+    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW' };
     before(async () => {
       sinon.stub(MatcheModel, 'create').resolves(createMatche as IMatche | any);
       sinon.stub(UserModel, "findOne").resolves(user as IUser | any);
@@ -62,37 +74,37 @@ describe('Testes da rota /matches', () => {
     after(() => sinon.restore());
     it('quando a criação dá certo, retorna status 201', async () => {
       const responseLogin = await chai.request(app).post('/login')
-      .send({email: 'admin@admin.com', password: 'secret_admin'});
+        .send({ email: 'admin@admin.com', password: 'secret_admin' });
 
       const TOKEN = responseLogin.body.token;
 
       const httpResponse = await chai.request(app).post('/matches')
-        .send({ homeTeam: 16, awayTeam: 8, homeTeamGoals: 2, awayTeamGoals: 2})
+        .send({ homeTeam: 16, awayTeam: 8, homeTeamGoals: 2, awayTeamGoals: 2 })
         .set('Authorization', TOKEN);
       expect(httpResponse.status).to.equal(201);
       expect(httpResponse.body).to.deep.equal(createMatche)
     });
   })
-  
-  describe('Rota POST /matches', () => { 
-    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'};
+
+  describe('Rota POST /matches', () => {
+    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW' };
     before(async () => {
       sinon.stub(MatcheModel, 'create').resolves(null as any);
       sinon.stub(UserModel, "findOne").resolves(user as IUser | any);
-      sinon.stub(MatcheService.prototype, 'verifyTeams').resolves(null as any);
+      sinon.stub(MatcheService.prototype, 'verifyTeams').resolves(null as null);
     });
     after(() => sinon.restore());
     it('não é permitido criar partida com time inexistente', async () => {
       const responseLogin = await chai.request(app).post('/login')
-      .send({email: 'admin@admin.com', password: 'secret_admin'});
+        .send({ email: 'admin@admin.com', password: 'secret_admin' });
 
       const TOKEN = responseLogin.body.token;
 
       const httpResponse = await chai.request(app).post('/matches')
-        .send({ homeTeam: 165, awayTeam: 8, homeTeamGoals: 2, awayTeamGoals: 2})
+        .send({ homeTeam: 165, awayTeam: 8, homeTeamGoals: 2, awayTeamGoals: 2 })
         .set('Authorization', TOKEN);
       expect(httpResponse.status).to.equal(404);
-      expect(httpResponse.body).to.deep.equal({ message: 'There is no team with such id!'});
+      expect(httpResponse.body).to.deep.equal({ message: 'There is no team with such id!' });
     });
   });
 
@@ -101,26 +113,38 @@ describe('Testes da rota /matches', () => {
       const TOKEN = 'token';
 
       const httpResponse = await chai.request(app).post('/matches')
-        .send({ homeTeam: 16, awayTeam: 8, homeTeamGoals: 2, awayTeamGoals: 2})
+        .send({ homeTeam: 16, awayTeam: 8, homeTeamGoals: 2, awayTeamGoals: 2 })
         .set('Authorization', TOKEN);
       expect(httpResponse.status).to.equal(401);
-      expect(httpResponse.body).to.deep.equal({ message: 'Token must be a valid token'});
+      expect(httpResponse.body).to.deep.equal({ message: 'Token must be a valid token' });
     });
   });
 
-  describe('Rota POST /matches/:id', () => {
+  describe('Rota PATCH /matches/:id', () => {
     before(async () => {
       sinon.stub(MatcheModel, 'update').resolves([1] as number | any);
     });
     after(() => sinon.restore());
     it('é possível atualizar partidas em andamento', async () => {
       const httpResponse = await chai.request(app).patch('/matches/45')
-        .send({ homeTeamGoals: 3, awayTeamGoals: 1});
+        .send({ homeTeamGoals: 3, awayTeamGoals: 1 });
       expect(httpResponse.status).to.equal(200);
       expect(httpResponse.body).to.deep.equal({ message: 'Updated score' })
     });
   });
 
+
+  describe('Rota PATCH /matches:id', () => {
+    before(async () => {
+      sinon.stub(MatcheModel, 'update').rejects();
+    });
+    after(() => sinon.restore());
+    it('quando ocorre erro na requisição retorna status 500', async () => {
+      const httpResponse = await chai.request(app).patch('/matches/45');
+      expect(httpResponse.status).to.equal(500);
+      expect(httpResponse.body).to.equal('Error');
+    });
+  });
   describe('Rota PATCH /matches/:id/finish', () => {
     before(async () => {
       sinon.stub(MatcheService.prototype, 'finishMatche').resolves([1] as number | any);
@@ -130,7 +154,7 @@ describe('Testes da rota /matches', () => {
     it('é possível atualizar o status "inProgress" para false', async () => {
       const httpResponse = await chai.request(app).patch('/matches/25/finish');
       expect(httpResponse.status).to.equal(200);
-      expect(httpResponse.body).to.deep.equal({ message: "Finished"});
+      expect(httpResponse.body).to.deep.equal({ message: "Finished" });
     })
   });
 
@@ -144,7 +168,7 @@ describe('Testes da rota /matches', () => {
     it('não é possível atualizar o status "inProgress" para false de partida que não existe', async () => {
       const httpResponse = await chai.request(app).patch('/matches/652/finish');
       expect(httpResponse.status).to.equal(404);
-      expect(httpResponse.body).to.deep.equal({ message: "Id matche not exists"});
+      expect(httpResponse.body).to.deep.equal({ message: "Id matche not exists" });
     })
   });
 })

@@ -11,7 +11,8 @@ export default class LeaderBoard {
     this.getGeneralRanking = this.getGeneralRanking.bind(this);
   }
 
-  public getHomeRanking = async (req: Request, res: Response, next: NextFunction) => {
+  public getHomeRanking = async (req: Request, res: Response, next:
+  NextFunction): Promise<Response | undefined> => {
     try {
       const homeTeamsRanking = await this._service.getHomeRanking();
       return res.status(200).json(homeTeamsRanking);
@@ -20,7 +21,8 @@ export default class LeaderBoard {
     }
   };
 
-  public getAwayRanking = async (req: Request, res: Response, next: NextFunction) => {
+  public getAwayRanking = async (req: Request, res: Response, next:
+  NextFunction): Promise<Response | undefined> => {
     try {
       const awayTeamsRanking = await this._service.getAwayRanking();
       return res.status(200).json(awayTeamsRanking);
@@ -29,7 +31,8 @@ export default class LeaderBoard {
     }
   };
 
-  public getGeneralRanking = async (req: Request, res: Response, next: NextFunction) => {
+  public getGeneralRanking = async (req: Request, res: Response, next:
+  NextFunction): Promise<Response | undefined> => {
     try {
       const generalRanking = await this._service.getGeneralRanking();
       return res.status(200).json(generalRanking);

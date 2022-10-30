@@ -22,7 +22,7 @@ export default class Matche {
     }
   };
 
-  public getAll = async (req: Request, res: Response, next: NextFunction) => {
+  public getAll = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
     const { inProgress } = req.query;
     if (!inProgress) {
       try {
@@ -36,7 +36,8 @@ export default class Matche {
     return res.status(200).json(findInProgress);
   };
 
-  public create = async (req: Request, res: Response, next: NextFunction) => {
+  public create = async (req: Request, res: Response, next: NextFunction)
+  : Promise<Response | undefined> => {
     try {
       const matche = req.body as ICreateMatche;
       const newMatche = await this._service.create(matche);
@@ -47,7 +48,8 @@ export default class Matche {
     }
   };
 
-  public finishMatche = async (req: Request, res: Response, next: NextFunction) => {
+  public finishMatche = async (req: Request, res: Response, next: NextFunction)
+  : Promise<Response | undefined> => {
     try {
       const { id } = req.params;
       const endMatch = await this._service.finishMatche(id);
@@ -60,7 +62,8 @@ export default class Matche {
     }
   };
 
-  public updateMatcheScore = async (req: Request, res: Response, next: NextFunction) => {
+  public updateMatcheScore = async (req: Request, res: Response, next:
+  NextFunction): Promise<Response | undefined> => {
     try {
       const { id } = req.params;
       const { homeTeamGoals, awayTeamGoals } = req.body;

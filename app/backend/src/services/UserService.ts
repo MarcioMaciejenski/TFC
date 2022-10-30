@@ -24,7 +24,6 @@ export default class User {
     if (!isUser) {
       throw (new ErroGenerate('Incorrect email or password', 401));
     }
-    // const passwordDB = isUser?.getDataValue('password');
     const passwordDB = isUser.password;
     const verifyPassword = await bcrypt.compare(user.password, passwordDB);
     if (verifyPassword) {
@@ -33,7 +32,8 @@ export default class User {
     throw new ErroGenerate('Incorrect email or password', 401);
   }
 
-  static async verifyToken(token: string | undefined): Promise<string | jwt.JwtPayload | null> {
+  public static async verifyToken(token: string | undefined):
+  Promise<string | jwt.JwtPayload | null> {
     if (!token) throw (new ErroGenerate('Incorrect token', 401));
     const data = Token.decode(token) as IRole;
     return data.data.role;
