@@ -7,7 +7,6 @@ import { app } from '../app';
 import UserModel from '../database/models/UserModel';
 import { IUser } from '../interfaces/IUser.interface';
 import UserService from '../services/UserService';
-import Token from '../utils/Token';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -72,22 +71,40 @@ describe('Teste da rota /login', () => {
   });
 });
 
-// describe('Testes da rota GET /login/validate', () => {
-//   describe('quando a validação dá certo', () => {
-//     const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW' };
-//     beforeEach(async () => {
-//       sinon.stub(UserModel, "findOne").resolves(user as IUser | any);
-//       sinon.stub(UserService.verifyToken.prototype).resolves({data: 'admin'})
-//     });
-//     afterEach(() => sinon.restore());
-//     it('retorna o status 200 e a "role" do usuário', async () => {
-//       const responseLogin = await chai.request(app).post('/login')
-//       .send({ email: 'admin@admin.com', password: 'secret_admin' });
-//       const TOKEN = responseLogin.body.token;
-//       const httpResponse = await chai.request(app).get('/login/validate')
-//       .set('Authorization', TOKEN);
-//       expect(httpResponse.status).to.equal(200);
-//       expect(httpResponse.body).to.deep.equal({role: 'admin'});
-//     });
-//   });
-// });
+describe('Testes da rota GET /login/validate', () => {
+  describe('quando a validação dá certo', () => {
+    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW', role: 'admin' };
+    beforeEach(async () => {
+      sinon.stub(UserModel, "findOne").resolves(user as IUser | any);
+    });
+    afterEach(() => sinon.restore());
+    it('retorna o status 200 e a "role" do usuário', async () => {
+      const responseLogin = await chai.request(app).post('/login')
+      .send({ email: 'admin@admin.com', password: 'secret_admin' });
+      const TOKEN = responseLogin.body.token;
+      const httpResponse = await chai.request(app).get('/login/validate')
+      .set('Authorization', TOKEN);
+      expect(httpResponse.status).to.equal(200);
+      expect(httpResponse.body).to.deep.equal({role: 'admin'});
+    });
+  });
+});
+
+describe('Testes da rota GET /login/validate', () => {
+  describe('quando ocorre algum erro na validação', () => {
+    const user = { id: 1, email: "admin@admin.com", password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW', role: 'admin' };
+    beforeEach(async () => {
+      sinon.stub(UserModel, "findOne").resolves(user as IUser | any);
+      sinon.stub(UserService, "verifyToken").rejects().throws();
+    });
+    afterEach(() => sinon.restore());
+    it('retorna o status 500', async () => {
+      const responseLogin = await chai.request(app).post('/login')
+      .send({ email: 'admin@admin.com', password: 'secret_admin' });
+      const TOKEN = responseLogin.body.token;
+      const httpResponse = await chai.request(app).get('/login/validate')
+      .set('Authorization', TOKEN);
+      expect(httpResponse.status).to.equal(500);
+    });
+  });
+});

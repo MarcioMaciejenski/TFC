@@ -1,4 +1,4 @@
-export const leaderBoardAway = `SELECT t.team_name as name,
+const leaderBoardAway = `SELECT t.team_name as name,
 SUM(CASE
   WHEN m.away_team_goals > m.home_team_goals THEN 3
   WHEN m.away_team_goals = m.home_team_goals THEN 1
